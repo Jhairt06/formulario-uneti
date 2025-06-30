@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario | Sistema Académico Uneti</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Complete su información académica</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="formulario.html" class="active">Formulario</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <form id="formulario-datos" novalidate>
+            <div class="form-group">
+                <label for="nombre">Nombre completo*</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
+                <span class="error-message" id="error-nombre"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Correo institucional*</label>
+                <input type="email" id="email" name="email" placeholder="Ej: usuario@correo.com" required>
+                <span class="error-message" id="error-email"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Teléfono de contacto*</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="Ej: 04121234567" required>
+                <span class="error-message" id="error-telefono"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha-nacimiento">Fecha de nacimiento*</label>
+                <input type="date" id="fecha-nacimiento" name="fecha-nacimiento" required>
+                <span class="error-message" id="error-fecha"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Rol en la institución*</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="Estudiante" required>
+                        <span class="radio-custom"></span>
+                        Estudiante
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="Docente">
+                        <span class="radio-custom"></span>
+                        Docente
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rol" value="Director">
+                        <span class="radio-custom"></span>
+                        Director
+                    </label>
+                </div>
+                <span class="error-message" id="error-rol"></span>
+            </div>
+
+            <div class="form-actions">
+                <button type="reset" class="btn btn-secondary">Limpiar formulario</button>
+                <button type="submit" class="btn btn-primary">Enviar información</button>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <p>Realizado por Jaime Patiño; Daniel Romero, 31.307.643; Sección 8B</p>
+    </footer>
+
+    <script src="scripts/scripts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const formulario = document.getElementById('formulario-datos');
+            
+            formulario.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Si el formulario pasa la validación 
+                if (validarFormulario()) {
+                    // Se crea un objeto con los datos del formulario
+                    const datosFormulario = {
+                        nombre: document.getElementById('nombre').value,
+                        email: document.getElementById('email').value,
+                        telefono: document.getElementById('telefono').value,
+                        fechaNacimiento: document.getElementById('fecha-nacimiento').value,
+                        rol: document.querySelector('input[name="rol"]:checked').value
+                    };
+                    // Luego se guardan los datos temporalmente en sessionStorage
+                    sessionStorage.setItem('datosTemporales', JSON.stringify(datosFormulario));
+                    // Y se redirige a la página de confirmación
+                    window.location.href = 'confirmacion.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenida | Sistema Académico Uneti</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Bienvenido al Sistema Académico Uneti</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="formulario.html">Formulario</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="bienvenida">
+            <!-- Mensaje de éxito al guardar -->
+            <div id="mensaje-exito" class="mensaje-flotante" style="display: none;">
+                <p>¡Datos guardados correctamente!</p>
+            </div>
+            
+            <h2>Sus datos registrados</h2>
+            <div id="datos-usuario">
+                <p>No hay datos almacenados. Por favor, complete el formulario.</p>
+            </div>
+            <a href="formulario.html" class="btn">Ir al formulario</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>Realizado por Jaime Patiño, 31.604.037; Daniel Romero, 31.307.643; Sección 8B</p>
+    </footer>
+
+    <script src="scripts/scripts.js"></script>
+    <script>
+        // Mostrar datos almacenados si existen
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            const guardadoExitoso = params.get('guardado');
+            
+            // Mostrar mensaje de éxito si viene de confirmación
+            if (guardadoExitoso) {
+                const mensajeExito = document.getElementById('mensaje-exito');
+                mensajeExito.style.display = 'block';
+                
+                // Ocultar mensaje después de 3 segundos
+                setTimeout(() => {
+                    mensajeExito.style.opacity = '0';
+                    setTimeout(() => {
+                        mensajeExito.style.display = 'none';
+                    }, 500);
+                }, 3000);
+            }
+            
+            const datosGuardados = JSON.parse(localStorage.getItem('datosUsuario'));
+            const contenedorDatos = document.getElementById('datos-usuario');
+            
+            if (datosGuardados) {
+                // Formatear fecha para mejor visualización
+                const fechaFormateada = new Date(datosGuardados.fechaNacimiento).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                // Mostrar los datos 
+                contenedorDatos.innerHTML = `
+                    <p><strong>Nombre completo:</strong> ${datosGuardados.nombre}</p>
+                    <p><strong>Correo institucional:</strong> ${datosGuardados.email}</p>
+                    <p><strong>Teléfono de contacto:</strong> ${datosGuardados.telefono}</p>
+                    <p><strong>Fecha de nacimiento:</strong> ${fechaFormateada}</p>
+                    <p><strong>Rol en la institución:</strong> ${datosGuardados.rol}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

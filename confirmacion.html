@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación | Sistema Académico Uneti</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Confirme sus datos académicos</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="formulario.html">Formulario</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section id="confirmacion-datos">
+            <h2>Revise su información antes de confirmar</h2>
+            <div id="datos-confirmar">
+                <p class="cargando">Cargando datos...</p>
+            </div>
+            <div class="confirmation-actions">
+                <button id="btn-editar" class="btn btn-secondary">Editar datos</button>
+                <button id="btn-confirmar" class="btn btn-primary">Confirmar y guardar</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Realizado por Jaime Patiño; Daniel Romero, 31.307.643; Sección 8B</p>
+    </footer>
+
+    <script src="scripts/scripts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener datos
+            const datosTemporales = JSON.parse(sessionStorage.getItem('datosTemporales'));
+            const contenedorDatos = document.getElementById('datos-confirmar');
+            
+            if (datosTemporales) {
+                // Formatear fecha para mejor visualización
+                const fechaFormateada = new Date(datosTemporales.fechaNacimiento).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Mostrar los datos 
+                contenedorDatos.innerHTML = `
+                    <p><strong>Nombre completo:</strong> ${datosTemporales.nombre}</p>
+                    <p><strong>Correo institucional:</strong> ${datosTemporales.email}</p>
+                    <p><strong>Teléfono de contacto:</strong> ${datosTemporales.telefono}</p>
+                    <p><strong>Fecha de nacimiento:</strong> ${fechaFormateada}</p>
+                    <p><strong>Rol en la institución:</strong> ${datosTemporales.rol}</p>
+                `;
+            } else {
+                contenedorDatos.innerHTML = `
+                    <div class="mensaje-error">
+                        <p>No se encontraron datos para confirmar.</p>
+                        <a href="formulario.html" class="btn">Volver al formulario</a>
+                    </div>
+                `;
+                document.getElementById('btn-confirmar').disabled = true;
+                document.getElementById('btn-editar').disabled = true;
+            }
+            
+            // Botón para Editar
+            document.getElementById('btn-editar').addEventListener('click', function() {
+                window.location.href = 'formulario.html';
+            });
+            
+            // Botón para Confirmar
+            document.getElementById('btn-confirmar').addEventListener('click', function() {
+                if (datosTemporales) {
+                    // Guardar datos en localStorage
+                    localStorage.setItem('datosUsuario', JSON.stringify(datosTemporales));
+                    
+                    // Limpiar datos temporales
+                    sessionStorage.removeItem('datosTemporales');
+                    
+                    // Si todo sale bien, redirigir a la pagina principal
+                    window.location.href = 'index.html?guardado=true';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
